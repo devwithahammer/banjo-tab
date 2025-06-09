@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas with 5 Parallel Horizontal Lines</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="banjo.css">
+</head>
+<body>
+<br>
+<button id="downloadPdfBtn">Download PDF</button>
+<button id="saveJsonBtn">Save to File</button>
+<button id="loadJsonBtn">Load from File</button>
+<button id="cleanUpBtn">Clean Up</button>
+<input type="file" id="jsonFileInput" accept="application/json" style="display:none;">
+<br>
+<canvas id="myCanvas" width="1500" height="1000" style="border:1px solid #ccc;"></canvas>
+<br>
+
+<!-- Add this after your canvas in banjo.html -->
+<br>
+
+
+<pre id="jsonBox" style="background:#f8f8f8; border:1px solid #ccc; padding:10px; max-width:1200px; overflow:auto;"></pre>
+<div id="stringModal" style="display:none; position:fixed; top:40%; left:50%; transform:translate(-50%,-50%); background:#fff; border:1px solid #333; padding:20px; z-index:1000;">
+    <br>
+    <label for="stringSelect">String:</label>
+    <select id="stringSelect">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <br>
+    <br>
+    <label for="fretInput">Fret:</label>
+    <input type="number" id="fretInput" min="0" max="24">
+    <br>
+    <br>
+    <label for="noteSelect">Note:</label>
+    <select id="noteSelect">
+        <option value="4">4</option>
+        <option value="8">8</option>
+        <option value="16">16</option>
+    </select>
+    <br>
+    <br>
+    <label for="linkSelect">Link:</label>
+    <select id="linkSelect">
+        <option value=""></option>
+        <option value="sl">Slide from previous</option>
+        <option value="h">Hammer from previous</option>
+        <option value="po">PUll off from previous</option>
+    </select>
+    <br>
+    <br>
+    <!-- Add this before the Close button in #stringModal -->
+    <button id="nextElementBtn">Next</button>
+    <button id="backElementBtn">Back</button>
+    <button id="removeElementBtn">Remove</button>
+    <!-- Add this before the Close button in #stringModal -->
+    <button id="afterElementBtn">Add After</button>
+    <button onclick="document.getElementById('stringModal').style.display='none'">Close</button>
+</div>
+<script type="application/json" id="banjo-tab">
+    {
+        "lines": 5,
+        "markers": [
+            {
+                "line": 1,
+                "value": 3,
+                "position": 200
+            }
+        ],
+        "measures": [
+            {
+                "notes": [
+                    [
+                        {
+                            "string": 2,
+                            "fret": 3,
+                            "note": 8
+                        },
+                        {
+                            "string": 3,
+                            "fret": 1,
+                            "note": 8
+                        }
+                    ],
+                    [
+                        {
+                            "string": 5,
+                            "fret": 0,
+                            "note": 8
+                        },
+                        {
+                            "string": 2,
+                            "fret": 2,
+                            "note": 16
+                        },
+                        {
+                            "string": 2,
+                            "fret": 3,
+                            "note": 16,
+                            "link": "h"
+                        }
+                    ],
+                    [
+                        {
+                            "string": 2,
+                            "fret": 1,
+                            "note": 16
+                        },
+                        {
+                            "string": 2,
+                            "fret": 3,
+                            "note": 16,
+                            "link": "h"
+                        },
+                        {
+                            "string": 5,
+                            "fret": 0,
+                            "note": 8
+                        }
+                    ],
+                    [
+                        {
+                            "string": 3,
+                            "fret": 3,
+                            "note": 8
+                        },
+                        {
+                            "string": 1,
+                            "fret": 3,
+                            "note": 16
+                        },
+                        {
+                            "string": 1,
+                            "fret": 2,
+                            "note": 16,
+                            "link": "po"
+                        }
+                    ]
+                ]
+            },
+            {
+                "notes": [
+                    [
+                        {
+                            "string": 3,
+                            "fret": 0,
+                            "note": 8
+                        },
+                        {
+                            "string": 3,
+                            "fret": 2,
+                            "note": 8,
+                            "link": "sl"
+                        }
+                    ],
+                    [
+                        {
+                            "string": 3,
+                            "fret": 0,
+                            "note": 4
+                        }
+                    ],
+                    [
+                        {
+                            "string": 3,
+                            "fret": 0,
+                            "note": 4
+                        }
+                    ],
+                    [
+                        {
+                            "string": 3,
+                            "fret": 0,
+                            "note": 4
+                        }
+                    ]
+                ]
+            }
+        ],
+        "numberToDraw": 5,
+        "state": {
+            "cursor": {
+                "measure": 0,
+                "note": 3,
+                "element": 0
+            }
+        }
+    }
+</script>
+<script src="banjo.js"></script>
+</body>
+</html>
