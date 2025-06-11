@@ -58,3 +58,12 @@ button {
     margin-top: 8px;
     margin-right: 6px;
 }
+
+#canvasContainer {
+    width: 900px;
+    height: 500px;
+    overflow: auto;
+    border: 1px solid #ccc;
+    margin: 0 auto 20px auto;
+    background: #fff;
+}
