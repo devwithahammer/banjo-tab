@@ -47,14 +47,14 @@ button:hover {
     font-weight: 500;
     color: #1976d2;
 }
-#stringModal input, #stringModal select {
+input, select {
     margin: 4px 0 12px 0;
     padding: 4px 8px;
     border-radius: 3px;
     border: 1px solid #b0bec5;
     font-size: 15px;
 }
-#stringModal button {
+button {
     margin-top: 8px;
     margin-right: 6px;
 }

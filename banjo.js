@@ -293,7 +293,7 @@ document.getElementById('noteSelect').value = noteValue;
         document.getElementById('linkSelect').value = linkValue;
 
         // Show modal
-        document.getElementById('stringModal').style.display = 'block';
+//        document.getElementById('stringModal').style.display = 'block';
         draw();
     });
 
