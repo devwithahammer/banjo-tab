@@ -194,8 +194,6 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
             }
         }
 
-    // At the end of your draw() function, add:
-    document.getElementById('jsonBox').textContent = JSON.stringify(banjoTab, null, 2);
     }
 
     draw();
@@ -519,7 +517,6 @@ document.getElementById('removeElementBtn').addEventListener('click', function()
 
         // If all notes are removed, close modal
         if (notes.length === 0) {
-            document.getElementById('stringModal').style.display = 'none';
             draw();
             return;
         }
@@ -564,26 +561,6 @@ document.getElementById('removeElementBtn').addEventListener('click', function()
         document.getElementById('linkSelect').value = template.link;
         draw();
     }
-});
-
-    // Make #stringModal draggable
-const modal = document.getElementById('stringModal');
-let isDragging = false, offsetX = 0, offsetY = 0;
-
-modal.addEventListener('mousedown', function(e) {
-    // Only drag if clicked on the modal, not on a button/input
-    if (e.target !== modal) return;
-    isDragging = true;
-    offsetX = e.clientX - modal.offsetLeft;
-    offsetY = e.clientY - modal.offsetTop;
-    document.body.style.userSelect = 'none';
-});
-
-document.addEventListener('mousemove', function(e) {
-    if (!isDragging) return;
-    modal.style.left = (e.clientX - offsetX) + 'px';
-    modal.style.top = (e.clientY - offsetY) + 'px';
-    modal.style.transform = 'none'; // Disable centering transform while dragging
 });
 
 document.addEventListener('mouseup', function() {
