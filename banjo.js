@@ -83,6 +83,9 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
     let topI = null;
     let nextY = null;
     let nextI = null;
+    if (element.stringTwo) {
+        console.log('fretTwo ', element.fretTwo);
+    }
     for (let i = 0; i < 5; i++) {
         const y = newY + i * lineSpacing;
         if (element.string === i + 1) {
@@ -129,7 +132,7 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
                 }
             }
 
-        } else if (element.stringTwo && element.fretTwo && element.stringTwo === i + 1) {
+        } else if (element.stringTwo && (element.fretTwo === 0 || element.fretTwo > 0) && element.stringTwo === i + 1) {
             const textWidth = ctx.measureText(String(element.fretTwo)).width;
             const breakStart = startX + width / 2 - textWidth / 2 - gap;
             const breakEnd = startX + width / 2 + textWidth / 2 + gap;
@@ -183,7 +186,7 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
     }
     else if (topY && nextY) {
 
-        drawLineV(ctx, startX + width / 2, topY + gap, nextY - gap, highlight);
+        drawLineV(ctx, startX + width / 2, topY + gap, nextY - 2 * gap, highlight);
 
         drawLineV(ctx, startX + width / 2, nextY + gap, nextY + (5 - nextI) * lineSpacing, highlight);
     }
@@ -192,12 +195,19 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let startX = 20;
+
+    ctx.font = '30px Arial';
+
+    ctx.fillText(banjoTab.title, startX, 2*startX);
+
     ctx.font = '16px Arial';
 
     let newY = tabStartY;
 
 
-    let startX = 20;
+
     let measureCount = 0;
 
     let measureIndex = -1;
@@ -252,6 +262,7 @@ function draw() {
         }
     }
 
+    document.getElementById('title').value = banjoTab.title;
 }
 
 draw();
@@ -329,7 +340,9 @@ canvas.addEventListener('click', function(e) {
 
 
     let fret = '';
+    let fretTwo = '';
     let string = '';
+    let stringTwo = '';
     let noteValue = '';
     let linkValue = '';
     if (
@@ -338,12 +351,16 @@ canvas.addEventListener('click', function(e) {
     banjoTab.measures[measure].notes[note][element]
     ) {
         fret = banjoTab.measures[measure].notes[note][element].fret;
+        fretTwo = banjoTab.measures[measure].notes[note][element].fretTwo;
         string = banjoTab.measures[measure].notes[note][element].string;
+        stringTwo = banjoTab.measures[measure].notes[note][element].stringTwo;
         noteValue = banjoTab.measures[measure].notes[note][element].note;
         linkValue = banjoTab.measures[measure].notes[note][element].link;
     }
     document.getElementById('fretInput').value = fret;
+    document.getElementById('fretInputTwo').value = fretTwo;
     document.getElementById('stringSelect').value = string;
+    document.getElementById('stringSelectTwo').value = stringTwo;
     document.getElementById('noteSelect').value = noteValue;
 
     document.getElementById('linkSelect').value = linkValue;
@@ -383,6 +400,9 @@ document.getElementById('stringSelectTwo').addEventListener('change', function()
     banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].stringTwo = newString;
+        if (!banjoTab.measures[measure].notes[note][element].fretTwo) {
+            banjoTab.measures[measure].notes[note][element].fretTwo = 0;
+        }
         draw();
     }
 });
@@ -490,6 +510,9 @@ function addAtEnd() {
     const el = banjoTab.measures[measure].notes[note][element];
     document.getElementById('fretInput').value = el.fret;
     document.getElementById('stringSelect').value = el.string;
+
+    document.getElementById('fretInputTwo').value = el.fretTwo;
+    document.getElementById('stringSelectTwo').value = el.stringTwo;
     document.getElementById('noteSelect').value = el.note;
     document.getElementById('linkSelect').value = el.link;
     draw();
@@ -559,6 +582,9 @@ function iterate(delta) {
     const el = banjoTab.measures[measure].notes[note][element];
     document.getElementById('fretInput').value = el.fret;
     document.getElementById('stringSelect').value = el.string;
+
+    document.getElementById('fretInputTwo').value = el.fretTwo;
+    document.getElementById('stringSelectTwo').value = el.stringTwo;
     document.getElementById('noteSelect').value = el.note;
     document.getElementById('linkSelect').value = el.link;
     draw();
@@ -622,6 +648,9 @@ document.getElementById('removeElementBtn').addEventListener('click', function()
         const el = notes[note][element];
         document.getElementById('fretInput').value = el.fret;
         document.getElementById('stringSelect').value = el.string;
+
+        document.getElementById('fretInputTwo').value = el.fretTwo;
+        document.getElementById('stringSelectTwo').value = el.stringTwo;
         document.getElementById('noteSelect').value = el.note;
         document.getElementById('linkSelect').value = el.link;
         draw();
@@ -648,6 +677,9 @@ document.getElementById('afterElementBtn').addEventListener('click', function() 
         // Update modal fields
         document.getElementById('fretInput').value = template.fret;
         document.getElementById('stringSelect').value = template.string;
+
+        document.getElementById('fretInputTwo').value = template.fretTwo;
+        document.getElementById('stringSelectTwo').value = template.stringTwo;
         document.getElementById('noteSelect').value = template.note;
         document.getElementById('linkSelect').value = template.link;
         draw();

@@ -8,6 +8,8 @@
 </head>
 <body>
 <br>
+<input type="text" id="title" />
+<br>
 <button id="downloadPdfBtn">Download PDF</button>
 <button id="saveJsonBtn">Save to File</button>
 <button id="loadJsonBtn">Load from File</button>
@@ -67,7 +69,7 @@
       <option value=""></option>
       <option value="sl">Slide from previous</option>
       <option value="h">Hammer from previous</option>
-      <option value="po">PUll off from previous</option>
+      <option value="po">Pull off from previous</option>
     </select>
   </div>
 </div>
@@ -83,6 +85,7 @@
 <br>
 <script type="application/json" id="banjo-tab">
     {
+        "title": "Some G licks",
         "measures": [
             {
                 "notes": [
@@ -206,4 +209,5 @@
 <script src="banjo.js"></script>
 </body>
 </html>
+
 
