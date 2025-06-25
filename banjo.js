@@ -457,6 +457,11 @@ document.getElementById('noteSelect').addEventListener('change', function() {
     }
 });
 
+document.getElementById('title').addEventListener('change', function() {
+    banjoTab.title = this.value;
+    draw();
+});
+
 document.getElementById('linkSelect').addEventListener('change', function() {
     const measure = banjoTab.state.cursor.measure;
     const note = banjoTab.state.cursor.note;
