@@ -79,6 +79,10 @@ function isMeasureComplete(measure) {
 
 function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, position, highlight) {
     const endX = startX + width;
+    let topY = null;
+    let topI = null;
+    let nextY = null;
+    let nextI = null;
     for (let i = 0; i < 5; i++) {
         const y = newY + i * lineSpacing;
         if (element.string === i + 1) {
@@ -91,8 +95,9 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
             }
             ctx.textBaseline = 'middle';
             ctx.fillText(String(element.fret), startX + width / 2 - textWidth / 2, y);
-            drawLineV(ctx, startX + width / 2, y + gap, y + (5 - i) * lineSpacing, highlight);
 
+            topY = y;
+            topI = i;
             if (element.note === 8) {
                 if (position === 0) {
                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
@@ -124,10 +129,65 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
                 }
             }
 
-        } else {
+        } else if (element.stringTwo && element.fretTwo && element.stringTwo === i + 1) {
+                          const textWidth = ctx.measureText(String(element.fretTwo)).width;
+                              const breakStart = startX + width / 2 - textWidth / 2 - gap;
+                              const breakEnd = startX + width / 2 + textWidth / 2 + gap;
+                              if (element.note < 16) {
+                                  drawLineH(ctx, startX, breakStart, y);
+                                  drawLineH(ctx, breakEnd, endX, y);
+                              }
+                              ctx.textBaseline = 'middle';
+                              ctx.fillText(String(element.fretTwo), startX + width / 2 - textWidth / 2, y);
+
+            nextY = y;
+            nextI = i;
+                              if (element.note === 8) {
+                                  if (position === 0) {
+                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                                  } else {
+                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                                  }
+                              }
+
+                              if (element.note === 16) {
+                                  if (position === 0) {
+                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                                  }
+
+                                  else if (position === 1) {
+                                     drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                                  }
+
+
+                                  else if (position === 2) {
+                                     drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                                  }
+
+                                  else if (position === 3) {
+                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                                  }
+                              }
+
+                          } else {
             drawLineH(ctx, startX, endX, y);
         }
     }
+    if (topY && nextY == null) {
+
+            drawLineV(ctx, startX + width / 2, topY + gap, topY + (5 - topI) * lineSpacing, highlight);
+            }
+    else if (topY && nextY) {
+
+            drawLineV(ctx, startX + width / 2, topY + gap, nextY - gap, highlight);
+
+            drawLineV(ctx, startX + width / 2, nextY + gap, nextY + (5 - nextI) * lineSpacing, highlight);
+    }
+
 }
 
     function draw() {
@@ -161,8 +221,6 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
             for (element of note) {
                 elementIndex++
                 let width = measureWidth/element.note;
-
-
 
                 if (elementIndex === banjoTab.state.cursor.element
                     && noteIndex === banjoTab.state.cursor.note
@@ -295,7 +353,7 @@ document.getElementById('noteSelect').value = noteValue;
         draw();
     });
 
-    document.getElementById('stringSelect').addEventListener('change', function() {
+document.getElementById('stringSelect').addEventListener('change', function() {
     const measure = banjoTab.state.cursor.measure;
     const note = banjoTab.state.cursor.note;
     const element = banjoTab.state.cursor.element;
@@ -308,6 +366,23 @@ document.getElementById('noteSelect').value = noteValue;
         banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].string = newString;
+        draw();
+    }
+});
+
+document.getElementById('stringSelectTwo').addEventListener('change', function() {
+    const measure = banjoTab.state.cursor.measure;
+    const note = banjoTab.state.cursor.note;
+    const element = banjoTab.state.cursor.element;
+    const newString = parseInt(this.value, 10);
+
+    // Defensive: check measure/note/element exist
+    if (
+        banjoTab.measures[measure] &&
+        banjoTab.measures[measure].notes[note] &&
+        banjoTab.measures[measure].notes[note][element]
+    ) {
+        banjoTab.measures[measure].notes[note][element].stringTwo = newString;
         draw();
     }
 });
@@ -325,6 +400,22 @@ document.getElementById('fretInput').addEventListener('change', function() {
         banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].fret = newFret;
+        draw();
+    }
+});
+
+document.getElementById('fretInputTwo').addEventListener('change', function() {
+    const measure = banjoTab.state.cursor.measure;
+    const note = banjoTab.state.cursor.note;
+    const element = banjoTab.state.cursor.element;
+    const newFret = parseInt(this.value, 10);
+
+    if (
+        banjoTab.measures[measure] &&
+        banjoTab.measures[measure].notes[note] &&
+        banjoTab.measures[measure].notes[note][element]
+    ) {
+        banjoTab.measures[measure].notes[note][element].fretTwo = newFret;
         draw();
     }
 });
