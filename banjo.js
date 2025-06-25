@@ -83,9 +83,6 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
     let topI = null;
     let nextY = null;
     let nextI = null;
-    if (element.stringTwo) {
-        console.log('fretTwo ', element.fretTwo);
-    }
     for (let i = 0; i < 5; i++) {
         const y = newY + i * lineSpacing;
         if (element.string === i + 1) {
