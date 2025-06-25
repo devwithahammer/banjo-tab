@@ -1,40 +1,40 @@
- const canvas = document.getElementById('myCanvas');
-    const ctx = canvas.getContext('2d');
-    const lineSpacing = 30;
-    const startY = 30;
-    const lineStart = 20;
-    const lineEnd = 380;
-    const tabStartX = 20;
-    const tabStartY = 200;
-    const measureWidth = 320;
-    const margin = 20;
-    const banjoTab = JSON.parse(document.getElementById('banjo-tab').textContent);
-    const gap = 10;
-    const nextLine = 300;
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+const lineSpacing = 30;
+const startY = 30;
+const lineStart = 20;
+const lineEnd = 380;
+const tabStartX = 20;
+const tabStartY = 200;
+const measureWidth = 320;
+const margin = 20;
+const banjoTab = JSON.parse(document.getElementById('banjo-tab').textContent);
+const gap = 10;
+const nextLine = 300;
 
-    let markers = [{ line: 1, x: (lineStart + lineEnd) / 2 }];
+let markers = [{ line: 1, x: (lineStart + lineEnd) / 2 }];
 
-    function drawLineH(ctx, startX, endX, y) {
-        ctx.beginPath();
-        ctx.moveTo(startX, y);
-        ctx.lineTo(endX, y);
+function drawLineH(ctx, startX, endX, y) {
+    ctx.beginPath();
+    ctx.moveTo(startX, y);
+    ctx.lineTo(endX, y);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
+
+function drawLineV(ctx, x, startY, endY, highlight) {
+    ctx.beginPath();
+    ctx.moveTo(x, startY);
+    ctx.lineTo(x, endY);
+    if (highlight) {
+        ctx.strokeStyle = 'red';
+    } else {
         ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
     }
-
-    function drawLineV(ctx, x, startY, endY, highlight) {
-        ctx.beginPath();
-        ctx.moveTo(x, startY);
-        ctx.lineTo(x, endY);
-        if (highlight) {
-            ctx.strokeStyle = 'red';
-        } else {
-            ctx.strokeStyle = '#000';
-        }
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
 
 function drawCurve(ctx, startX, startY, endX, endY, controlX, controlY) {
     ctx.beginPath();
@@ -86,7 +86,7 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
     for (let i = 0; i < 5; i++) {
         const y = newY + i * lineSpacing;
         if (element.string === i + 1) {
-        const textWidth = ctx.measureText(String(element.fret)).width;
+            const textWidth = ctx.measureText(String(element.fret)).width;
             const breakStart = startX + width / 2 - textWidth / 2 - gap;
             const breakEnd = startX + width / 2 + textWidth / 2 + gap;
             if (element.note < 16) {
@@ -100,118 +100,118 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
             topI = i;
             if (element.note === 8) {
                 if (position === 0) {
-                   drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
                 } else {
-                   drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
                 }
             }
 
             if (element.note === 16) {
                 if (position === 0) {
-                   drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
-                   drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
                 }
 
                 else if (position === 1) {
-                   drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
-                   drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                    drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
                 }
 
 
                 else if (position === 2) {
-                   drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
-                   drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                    drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
                 }
 
                 else if (position === 3) {
-                   drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
-                   drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
                 }
             }
 
         } else if (element.stringTwo && element.fretTwo && element.stringTwo === i + 1) {
-                          const textWidth = ctx.measureText(String(element.fretTwo)).width;
-                              const breakStart = startX + width / 2 - textWidth / 2 - gap;
-                              const breakEnd = startX + width / 2 + textWidth / 2 + gap;
-                              if (element.note < 16) {
-                                  drawLineH(ctx, startX, breakStart, y);
-                                  drawLineH(ctx, breakEnd, endX, y);
-                              }
-                              ctx.textBaseline = 'middle';
-                              ctx.fillText(String(element.fretTwo), startX + width / 2 - textWidth / 2, y);
+            const textWidth = ctx.measureText(String(element.fretTwo)).width;
+            const breakStart = startX + width / 2 - textWidth / 2 - gap;
+            const breakEnd = startX + width / 2 + textWidth / 2 + gap;
+            if (element.note < 16) {
+                drawLineH(ctx, startX, breakStart, y);
+                drawLineH(ctx, breakEnd, endX, y);
+            }
+            ctx.textBaseline = 'middle';
+            ctx.fillText(String(element.fretTwo), startX + width / 2 - textWidth / 2, y);
 
             nextY = y;
             nextI = i;
-                              if (element.note === 8) {
-                                  if (position === 0) {
-                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
-                                  } else {
-                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
-                                  }
-                              }
+            if (element.note === 8) {
+                if (position === 0) {
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                } else {
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                }
+            }
 
-                              if (element.note === 16) {
-                                  if (position === 0) {
-                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
-                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
-                                  }
+            if (element.note === 16) {
+                if (position === 0) {
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                }
 
-                                  else if (position === 1) {
-                                     drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
-                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
-                                  }
+                else if (position === 1) {
+                    drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                }
 
 
-                                  else if (position === 2) {
-                                     drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
-                                     drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
-                                  }
+                else if (position === 2) {
+                    drawLineH(ctx, startX, startX + width, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX + width / 2, startX + width, y + (5 - i) * lineSpacing - 5);
+                }
 
-                                  else if (position === 3) {
-                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
-                                     drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
-                                  }
-                              }
+                else if (position === 3) {
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing);
+                    drawLineH(ctx, startX, startX + width / 2, y + (5 - i) * lineSpacing - 5);
+                }
+            }
 
-                          } else {
+        } else {
             drawLineH(ctx, startX, endX, y);
         }
     }
     if (topY && nextY == null) {
 
-            drawLineV(ctx, startX + width / 2, topY + gap, topY + (5 - topI) * lineSpacing, highlight);
-            }
+        drawLineV(ctx, startX + width / 2, topY + gap, topY + (5 - topI) * lineSpacing, highlight);
+    }
     else if (topY && nextY) {
 
-            drawLineV(ctx, startX + width / 2, topY + gap, nextY - gap, highlight);
+        drawLineV(ctx, startX + width / 2, topY + gap, nextY - gap, highlight);
 
-            drawLineV(ctx, startX + width / 2, nextY + gap, nextY + (5 - nextI) * lineSpacing, highlight);
+        drawLineV(ctx, startX + width / 2, nextY + gap, nextY + (5 - nextI) * lineSpacing, highlight);
     }
 
 }
 
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '16px Arial';
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '16px Arial';
 
-        let newY = tabStartY;
+    let newY = tabStartY;
 
 
-        let startX = 20;
-        let measureCount = 0;
+    let startX = 20;
+    let measureCount = 0;
 
-        let measureIndex = -1;
-        let noteIndex = -1;
-        let elementIndex = -1;
-        let highlight = false;
-        let lastX = 0;
+    let measureIndex = -1;
+    let noteIndex = -1;
+    let elementIndex = -1;
+    let highlight = false;
+    let lastX = 0;
 
-        drawLineV(ctx, startX, newY, newY + 4 * lineSpacing);
+    drawLineV(ctx, startX, newY, newY + 4 * lineSpacing);
 
-        for (measure of banjoTab.measures) {
+    for (measure of banjoTab.measures) {
         measureCount++;
         measureIndex++;
-                drawFiveLinesAtX(ctx, startX, newY);
+        drawFiveLinesAtX(ctx, startX, newY);
         startX += margin;
         noteIndex = -1;
         for (note of measure.notes) {
@@ -223,8 +223,8 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
                 let width = measureWidth/element.note;
 
                 if (elementIndex === banjoTab.state.cursor.element
-                    && noteIndex === banjoTab.state.cursor.note
-                    && measureIndex === banjoTab.state.cursor.measure) {
+                && noteIndex === banjoTab.state.cursor.note
+                && measureIndex === banjoTab.state.cursor.measure) {
                     highlight = true;
                 }
                 drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, position, highlight);
@@ -246,112 +246,112 @@ function drawNoteLines(ctx, element, startX, newY, width, lineSpacing, gap, posi
         drawFiveLinesAtX(ctx, startX, newY);
         startX += margin;
         drawLineV(ctx, startX, newY, newY + 4 * lineSpacing);
-            if (measureCount % 4 === 0) {
-                newY += nextLine; // Move down for next set of measures
-                startX = 20; // Reset startX for the next set
-            }
+        if (measureCount % 4 === 0) {
+            newY += nextLine; // Move down for next set of measures
+            startX = 20; // Reset startX for the next set
         }
-
     }
 
-    draw();
+}
 
-    document.getElementById('downloadPdfBtn').onclick = function() {
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF({
-            orientation: 'landscape',
-            unit: 'pt',
-            format: [canvas.width, canvas.height]
-        });
-        const imgData = canvas.toDataURL('image/png');
-        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-        pdf.save('canvas.pdf');
-    };
+draw();
 
-    canvas.addEventListener('click', function(e) {
-        const rect = canvas.getBoundingClientRect();
-        const y = e.clientY - rect.top;
-        const x = e.clientX - rect.left;
+document.getElementById('downloadPdfBtn').onclick = function() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'pt',
+        format: [canvas.width, canvas.height]
+    });
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save('canvas.pdf');
+};
+
+canvas.addEventListener('click', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const x = e.clientX - rect.left;
 
 
-        const row = Math.floor((y - tabStartY) / nextLine);
+    const row = Math.floor((y - tabStartY) / nextLine);
 
-        const measure = Math.floor((x - tabStartX) / (measureWidth + 2 * margin)) + row * 4;
-        const posInMeasure = (x - tabStartX) % (measureWidth + 2 * margin);
-        let note = 0;
-        if (posInMeasure < measureWidth/4 + margin) {
-            note = 0;
-        } else if (posInMeasure < 2 * measureWidth/4 + margin) {
-            note = 1;
-        } else if (posInMeasure < 3 * measureWidth/4 + margin) {
-            note = 2;
-        } else {
-            note = 3;
-        }
+    const measure = Math.floor((x - tabStartX) / (measureWidth + 2 * margin)) + row * 4;
+    const posInMeasure = (x - tabStartX) % (measureWidth + 2 * margin);
+    let note = 0;
+    if (posInMeasure < measureWidth/4 + margin) {
+        note = 0;
+    } else if (posInMeasure < 2 * measureWidth/4 + margin) {
+        note = 1;
+    } else if (posInMeasure < 3 * measureWidth/4 + margin) {
+        note = 2;
+    } else {
+        note = 3;
+    }
 
-        let element = 0;
+    let element = 0;
 
-        if (
-            banjoTab.measures[measure] &&
-            banjoTab.measures[measure].notes[note] &&
-            banjoTab.measures[measure].notes[note].length > 1
-        ) {
+    if (
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note].length > 1
+    ) {
 
-            let posInNote = (posInMeasure - margin) % (measureWidth / 4.0);
+        let posInNote = (posInMeasure - margin) % (measureWidth / 4.0);
 
-            if (posInNote < measureWidth/16) {
+        if (posInNote < measureWidth/16) {
 
-            } else if (posInNote < measureWidth/8) {
-                if (banjoTab.measures[measure].notes[note][0].note == 16) {
-                    element = 1;
-                }
-            } else if (posInNote < 3 * measureWidth/16) {
-                if (banjoTab.measures[measure].notes[note][0].note == 16
-                    && banjoTab.measures[measure].notes[note][1].note == 16
-                    && banjoTab.measures[measure].notes[note].length > 2) {
-                    element = 2;
-                } else {
-                    element = 1;
-                }
+        } else if (posInNote < measureWidth/8) {
+            if (banjoTab.measures[measure].notes[note][0].note == 16) {
+                element = 1;
+            }
+        } else if (posInNote < 3 * measureWidth/16) {
+            if (banjoTab.measures[measure].notes[note][0].note == 16
+            && banjoTab.measures[measure].notes[note][1].note == 16
+            && banjoTab.measures[measure].notes[note].length > 2) {
+                element = 2;
             } else {
-                element = banjoTab.measures[measure].notes[note].length - 1;
+                element = 1;
             }
-
-            if (posInMeasure > measureWidth + margin) {
-                element = banjoTab.measures[measure].notes[note].length - 1;
-            }
+        } else {
+            element = banjoTab.measures[measure].notes[note].length - 1;
         }
 
-            // Update cursor state
-        banjoTab.state.cursor.measure = measure;
-        banjoTab.state.cursor.note = note;
-        banjoTab.state.cursor.element = element;
+        if (posInMeasure > measureWidth + margin) {
+            element = banjoTab.measures[measure].notes[note].length - 1;
+        }
+    }
+
+    // Update cursor state
+    banjoTab.state.cursor.measure = measure;
+    banjoTab.state.cursor.note = note;
+    banjoTab.state.cursor.element = element;
 
 
-  let fret = '';
-  let string = '';
-let noteValue = '';
-let linkValue = '';
-if (
+    let fret = '';
+    let string = '';
+    let noteValue = '';
+    let linkValue = '';
+    if (
     banjoTab.measures[measure] &&
     banjoTab.measures[measure].notes[note] &&
     banjoTab.measures[measure].notes[note][element]
-) {
-    fret = banjoTab.measures[measure].notes[note][element].fret;
-    string = banjoTab.measures[measure].notes[note][element].string;
-    noteValue = banjoTab.measures[measure].notes[note][element].note;
-    linkValue = banjoTab.measures[measure].notes[note][element].link;
-}
-document.getElementById('fretInput').value = fret;
-document.getElementById('stringSelect').value = string;
-document.getElementById('noteSelect').value = noteValue;
+    ) {
+        fret = banjoTab.measures[measure].notes[note][element].fret;
+        string = banjoTab.measures[measure].notes[note][element].string;
+        noteValue = banjoTab.measures[measure].notes[note][element].note;
+        linkValue = banjoTab.measures[measure].notes[note][element].link;
+    }
+    document.getElementById('fretInput').value = fret;
+    document.getElementById('stringSelect').value = string;
+    document.getElementById('noteSelect').value = noteValue;
 
-        document.getElementById('linkSelect').value = linkValue;
+    document.getElementById('linkSelect').value = linkValue;
 
-        // Show modal
-//        document.getElementById('stringModal').style.display = 'block';
-        draw();
-    });
+    // Show modal
+    //        document.getElementById('stringModal').style.display = 'block';
+    draw();
+});
 
 document.getElementById('stringSelect').addEventListener('change', function() {
     const measure = banjoTab.state.cursor.measure;
@@ -361,9 +361,9 @@ document.getElementById('stringSelect').addEventListener('change', function() {
 
     // Defensive: check measure/note/element exist
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].string = newString;
         draw();
@@ -378,16 +378,16 @@ document.getElementById('stringSelectTwo').addEventListener('change', function()
 
     // Defensive: check measure/note/element exist
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].stringTwo = newString;
         draw();
     }
 });
 
-    // Add event listener for fret input
+// Add event listener for fret input
 document.getElementById('fretInput').addEventListener('change', function() {
     const measure = banjoTab.state.cursor.measure;
     const note = banjoTab.state.cursor.note;
@@ -395,9 +395,9 @@ document.getElementById('fretInput').addEventListener('change', function() {
     const newFret = parseInt(this.value, 10);
 
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].fret = newFret;
         draw();
@@ -411,16 +411,16 @@ document.getElementById('fretInputTwo').addEventListener('change', function() {
     const newFret = parseInt(this.value, 10);
 
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].fretTwo = newFret;
         draw();
     }
 });
 
-    // Add event listener for note select
+// Add event listener for note select
 document.getElementById('noteSelect').addEventListener('change', function() {
     const measure = banjoTab.state.cursor.measure;
     const note = banjoTab.state.cursor.note;
@@ -428,9 +428,9 @@ document.getElementById('noteSelect').addEventListener('change', function() {
     const newNote = parseInt(this.value, 10);
 
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].note = newNote;
         draw();
@@ -444,9 +444,9 @@ document.getElementById('linkSelect').addEventListener('change', function() {
     const newLink = this.value;
 
     if (
-        banjoTab.measures[measure] &&
-        banjoTab.measures[measure].notes[note] &&
-        banjoTab.measures[measure].notes[note][element]
+    banjoTab.measures[measure] &&
+    banjoTab.measures[measure].notes[note] &&
+    banjoTab.measures[measure].notes[note][element]
     ) {
         banjoTab.measures[measure].notes[note][element].link = newLink;
         draw();
@@ -495,11 +495,11 @@ function addAtEnd() {
     draw();
 }
 
- document.getElementById('nextElementBtn').addEventListener('click', function() {
+document.getElementById('nextElementBtn').addEventListener('click', function() {
     iterate(1);
 });
 
- document.getElementById('backElementBtn').addEventListener('click', function() {
+document.getElementById('backElementBtn').addEventListener('click', function() {
     iterate(-1);
 });
 
@@ -511,19 +511,19 @@ function iterate(delta) {
     if (delta > 0) {
         // Try next element
         if (
-            banjoTab.measures[measure] &&
-            banjoTab.measures[measure].notes[note] &&
-            element + 1 < banjoTab.measures[measure].notes[note].length
+        banjoTab.measures[measure] &&
+        banjoTab.measures[measure].notes[note] &&
+        element + 1 < banjoTab.measures[measure].notes[note].length
         ) {
             element += 1;
         } else if (
-            banjoTab.measures[measure] &&
-            note + 1 < banjoTab.measures[measure].notes.length
+        banjoTab.measures[measure] &&
+        note + 1 < banjoTab.measures[measure].notes.length
         ) {
             note += 1;
             element = 0;
         } else if (
-            measure + 1 < banjoTab.measures.length
+        measure + 1 < banjoTab.measures.length
         ) {
             measure += 1;
             note = 0;
@@ -628,7 +628,7 @@ document.getElementById('removeElementBtn').addEventListener('click', function()
     }
 });
 
-    document.getElementById('afterElementBtn').addEventListener('click', function() {
+document.getElementById('afterElementBtn').addEventListener('click', function() {
     let { measure, note, element } = banjoTab.state.cursor;
     const notes = banjoTab.measures[measure].notes;
     const currentNote = notes[note];
@@ -658,7 +658,7 @@ document.addEventListener('mouseup', function() {
     isDragging = false;
     document.body.style.userSelect = '';
 });
-    // Save JSON to file
+// Save JSON to file
 document.getElementById('saveJsonBtn').onclick = function() {
     const dataStr = JSON.stringify(banjoTab, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
